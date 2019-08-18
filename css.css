@@ -1,0 +1,465 @@
+/* CSS Document */
+
+ul.nav
+{
+	list-style-type: none;
+	background-color: white;
+	border-bottom: solid 4px #136D1F;
+	position: fixed;
+    top: 0;
+    width: 100%;
+	margin-top: -30px;
+	margin-left: -20px;
+	margin-right: -20px;
+	padding-top: 30px;
+	text-align: right;
+	z-index: 5; /*to make sure the widgets appear under, as it's 0 and they are +1 and +2*/
+}
+
+ul.nav h1
+{
+	display: inline-block;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 50px;
+	font-family: 'Dancing Script', cursive;
+	font-weight: bolder;
+	color: #136D1F;
+}
+
+ul.nav li
+{
+	padding-top: 20px;
+	display: inline-block;
+	font-family: 'Josefin Sans', sans-serif;
+}
+
+ul.nav li:last-child
+{
+	padding-right: 50px;
+}
+
+ul.nav a 
+{
+	float:left;
+	display: block;
+	margin-left: 20px;
+	margin-right: 20px;
+	padding-right: 10px;
+	padding-left: 10px;
+	text-decoration: none;
+	font-size: 25px;
+	color: #21BB35;
+	width: auto;
+	line-height: 2em;
+	border-radius: 10px;
+}
+
+ul.nav li a:hover
+{
+	background-color: #21BB35;
+	color: white;
+}
+
+body
+{
+	padding-top: 100px;
+	background-image: url("wallpaper.jpg");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 20px;
+}
+
+#property-search
+{
+	background-color: white;
+	border-radius: 5px;
+	padding: 30px;
+	width: 70%;
+	height: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 4px solid #136D1F;
+}
+
+#property-search h2
+{
+	color: #136D1F;
+	font-wight: bold;
+	margin-top: -20px;
+	margin-bottom: 15px;
+	font-size: 40px;
+	text-align: center;
+}
+
+#property-search
+{
+	text-align: center;
+}
+
+#property-search:last-child
+{
+	flat: right;
+}
+
+.max
+{
+	float: right;
+}
+
+.min
+{
+	float: left;
+}
+
+#property-search button
+{
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#property-search input[type=number]
+{
+	height: 20px;
+	margin-left: 20px;
+	text-align: center;
+	width: 100px;
+	border: none;
+	font-size: 15px;
+}
+
+#property-results
+{
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+	
+}
+
+.propertyListing
+{
+	background-color: white;
+	width: 40%;
+	display: inline-block;
+	margin: 5%;
+	padding-top: 0px;
+	height: 100%;
+    box-sizing: border-box;
+	overflow:scroll; 
+	border-radius: 10px;
+	
+}
+
+.propertyListing h3
+{
+	color: #136D1F;
+	text-align: center;
+	font-weight: bolder;
+}
+
+.propertyListing img
+{
+	display: block;
+	width: 80%;
+	margin: auto;
+}
+
+.propertyListing p
+{
+	margin: 10px;
+}
+
+.propertyListing h4
+{
+	display: inline-block;
+	margin: 2%;
+	font-size: 35px;
+	color: #21BB35;
+	width: 72%;
+}
+
+.propertyListing button
+{
+	display: inline-block;
+	float: right;
+	margin: 2%;
+	width: 20%;
+}
+
+.type
+{
+	display: inline-block;
+	float: left;
+	font-size: 16px;
+	padding-left: 5%;
+}
+
+.rooms
+{
+	display: inline-block;
+	float: right;
+	font-size: 16px;
+	padding-right: 5%;
+}
+
+.active
+{
+	z-index: 4;
+}
+
+#favorties-list
+{
+	background-color: white;
+	border-radius: 5px;
+	padding: 30px;
+	width: 70%;
+	height: 350px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 4px solid #136D1F;
+	overflow: scroll;
+}
+
+#favorties-list h2
+{
+	display: inline-block;
+	float: left;
+	margin-top: -3px;
+	margin-left: -1%;
+	font-size: 38px;
+	color: #136D1F;
+}
+
+#clear-all
+{
+	width: 30%;
+	display: inline-block;
+	margin-top: -20px;
+	margin-left: 17%;
+	margin-top: -8px;
+	margin-bottom: 20px;
+}
+
+#fav-list-ul
+{
+	list-style-type: none;
+	width: 100%;
+	margin-left: -15%;
+	margin-top: -20px;
+	padding-right: 13%;
+}
+
+#fav-list-ul li
+{
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 5%;
+	margin-bottom: 5%;
+	background-color:#21BB35;
+	border-radius: 5px;
+	width: 95%;
+	padding: 5%;
+}
+
+#fav-list-ul li:hover, #fav-list-ul li:active
+{
+	background-color:#167E24;
+}
+
+#fav-list-ul li a
+{
+	text-decoration: none;
+	font-size: 18px;
+	color: white;
+}
+
+#fav-list-ul li button
+{
+	float: right;
+	margin-right: -3%;
+	margin-top: -4%;
+	font-size: 90%;
+	z-index: 2;
+}
+
+#map 
+{
+   	height: 400px;
+ 	width: 100%;
+}
+
+#main-details
+{
+	background-color: white;
+	padding: 10px;
+	width: 80%;
+	text-align: center;
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 30px;
+	border-radius: 10px;
+
+}
+
+#main-details h1
+{
+	color: #136D1F;
+	font-size: 50px;
+	margin-bottom: -10px;
+}
+
+#main-details .clickableImage
+{
+	display: inline-block;
+	width: 30%;
+	margin-right: auto;
+	margin-left: auto;
+	border-radius: 5px;
+	height: auto;
+	object-fit: cover;
+	height: 150px;
+}
+
+#selected-Image
+{
+	width: 95%;
+	padding: 2%;
+	margin-bottom: 10px;
+	margin-top: -20px;
+}
+
+
+@media (max-width: 40.375em){
+	
+	.min
+	{
+		display: block;
+		width: 50%;
+		margin: 0px;
+		padding: 0px;
+		text-align: center;
+	}
+	
+	.max
+	{
+		display: block;
+		width: 50%;
+		margin: 0px;
+		padding: 0px;
+		text-align: center;
+		float: right;
+	}
+	
+	.propertyListing
+	{
+		display: block;
+		width: 80%;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	
+	#favorties-list h2
+	{
+		width: 100%;
+		display: block;
+		text-align: center;
+		margin-bottom: 25px;
+	}
+	
+	#favorties-list ul
+	{
+		margin-top: 110px;
+	}
+	
+	#main-details .clickableImage
+	{
+		display: inline-block;
+		width: 45%;
+		height: 100px;
+		padding: 3px;
+	}
+	
+	#clear-all
+	{
+		width: 50%;
+		display: block;
+		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: -90px;
+	}
+}
+
+@media (max-width: 33.438em){
+	
+	ul.nav
+	{
+		padding-right: 10px;
+		padding-left: 10px;
+		position: absolute;
+	}
+	
+	ul.nav h1
+	{
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+
+	ul.nav li
+	{
+		display: block;
+		padding: 0px;
+		margin: 0px;
+	}
+	
+	ul.nav li a
+	{
+		padding: 0px;
+		margin: 0px;
+		width: 100%;
+		text-align: center;
+	}
+	
+	ul.nav li:last-child
+	{	
+		padding: 0px;
+	}
+	
+	body
+	{
+		padding-top: 200px;
+	}
+	
+	#favorties-list h2
+	{
+		font-size: 30px;
+	}
+	
+	#main-details .clickableImage
+	{
+		display: inline-block;
+		width: 45%;
+		height: 50px;
+		padding: 3px;
+	}
+	
+	#main-details h1
+	{
+		font-size: 30px;
+	}
+	
+	#main-details h2
+	{
+		font-size: 20px;
+	}
+	
+	#selectedImage
+	{
+		margin-bottom: 5px;
+	}
+}

@@ -1,0 +1,379 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+    
+	<title>Real Estate</title>
+    
+  	<link href = "jquery-ui.css" rel = "stylesheet"> <!-- the jquery css from theme roller -->
+    <link href = "css.css" rel = "stylesheet"> <!-- my css sheeet -->
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script> <!-- the jquery sources -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script> 
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Josefin+Sans" rel="stylesheet"> <!-- font sources -->
+       
+</head>
+
+<body>
+
+    <ul class="nav">
+    	<h1>Real Estate</h1>
+        
+        <li><a href="#" id="search">Search</a></li>
+        <li><a href="#" id="favorites">Favorites</a></li>
+    </ul>
+    
+    <section>
+        <section id="property-search">
+          <h2> Property Search</h2>
+          <label for="type">Type: </label> <br><br><!-- the search section has a radio and two sliders, later made with jquery but for now are just the labels with max/min and empty divs -->
+                <input type="radio" id="any" name="type" value="any" checked>
+                <label for="any">any</label>
+                
+                <input type="radio" id="house" name="type" value="house">
+                <label for="house">house</label>
+                
+                <input type="radio" id="flat" name="type" value="flat">
+                <label for="flat">flat</label>
+                
+            <br><br>
+            
+            <label class="min" for="min-price">Min Price: </label>
+            <input class="min" type="number" id="min-price" placeholder="any" readonly>
+            
+            <input type="number" class="max" id="max-price" placeholder="any" readonly>
+            <label for="max-price" class="max">Max Price: </label>
+            
+            <br><br>
+            
+            <div id="price-slider"></div>
+        
+            <br><br>
+            
+            <label class="min" for="min-rooms">Min Rooms: </label>
+            <input class="min" type="number" id="min-rooms" placeholder="any" readonly>
+            
+            <input type="number" class= "max" id="max-rooms" placeholder="any" readonly>
+            <label for="max-rooms" class="max">Max Rooms: </label>
+            
+            <br><br>
+            
+            <div id="bedrooms-slider"></div>
+            
+            <br><br>
+            
+            <button id="submit-button">Search Properties</button>
+                
+        </section>
+    </section>
+    
+    
+    <section id="favorties-list"> <!-- this remains hidden until needed -->
+   	  <h2> Favorite Properties </h2>
+        <button id="clear-all"> clear all </button>
+        <ul id="fav-list-ul" class="fav-list-ul"> </ul>
+    </section>
+    
+    
+    <section id="property-results"> <!-- this is empty until a search is preformed -->
+    	
+    </section>
+    
+    
+    
+    <script>	
+		$(document).ready((function() {
+			
+			$.getJSON('properties.json', function(data){ //makes the json file accessible in all the jquery
+			
+				var prop1added = false; //for the checks later to prevent double favoriting a property
+				var prop2added = false;
+				var prop3added = false;
+				var prop4added = false;
+				var prop5added = false;
+				var prop6added = false;
+				var prop7added = false;
+				
+				$("#price-slider").slider({ //turns the slider into a proper jquery slider
+					range: true,
+					min: 100000,
+					max: 1500000,
+					values: [100000, 1500000],
+					
+					slide: function( event, ui ) {
+						$("#min-price").val(ui.values[0]);
+						$("#max-price").val(ui.values[1]);
+					}
+				});
+				
+				$("#bedrooms-slider").slider({
+					range: true,
+					min: 1,
+					max: 5,
+					values: [1, 5],
+					
+					slide: function( event, ui ) {
+						$("#min-rooms").val(ui.values[0]);
+						$("#max-rooms").val(ui.values[1]);
+					}
+				});
+				
+				$("#submit-button").button();
+				
+				$("#submit-button").on("click", function(){
+				
+					$('#property-results').empty(); //clears the previous searches
+					
+					var propertyType = $('input[name=type]:checked').val();
+					var minPrice = 0;
+					var maxPrice = 2000000;
+					var minRooms = 1;
+					var maxRooms = 5; //sets the default values if nothing is chosen in the search (as the values will seem empty because "any" is placeholder text
+					
+					if ($("#min-price").val()) { minPrice = $("#min-price").val(); } //gets the values if they are not empty
+					
+					if ($("#max-price").val()) { maxPrice = $("#max-price").val(); }
+					
+					if ($("#min-rooms").val()) { minRooms = $("#min-rooms").val(); }
+					
+					if ($("#max-rooms").val()) { maxRooms = $("#max-rooms").val(); }
+					
+					var noMatches = true;				
+					
+					for (var i in data.properties) { //will loop through all the properties in the array from the JSON
+						
+						 //these if statements check the values imputted to only display the properties that match
+						 //all given conditions
+						 
+						if (propertyType == data.properties[i].type || propertyType == "any"){
+						if (minPrice <= data.properties[i].price && maxPrice >= data.properties[i].price){
+						if (minRooms <= data.properties[i].bedrooms && maxRooms >= data.properties[i].bedrooms){
+								
+							//adds a property div in the results div with the title, picture, link, image, price, some details, and a favorite button. All are given a class to make them draggable	
+							$("#property-results").append("<div class =\"propertyListing\" data-id=\"" + data.properties[i].location + "\"> <h3 id=\"address\">" + data.properties[i].location + "</h3>"
+							+ "<a href=\""+ data.properties[i].url + "\"> <img src=\"" + data.properties[i].picture + "\"></a> <br> <p> <text class=\"type\"> Type: " + data.properties[i].type + " </text> <text class=\"rooms\">Rooms: " + data.properties[i].bedrooms + "<br> </text></p>" + 
+							"<h4>£" + data.properties[i].price + "</h4> <button class=\"favorite-button\">❤</button> </div>");		
+							noMatches = false;
+							
+							//makes the button for favoriting jquery	
+							$(".favorite-button").button();
+		
+		
+							$(".propertyListing").draggable({ 
+								revert:true, //puts them back after dragging
+	
+								drag:function () { //makes it so when dragged, the favorites list shows up to recieve the draggable, as well as hiding the search that is usually in the way
+									$("#favorties-list").show();
+									$("#property-search").hide();
+									$(this).addClass("active");
+									$(this).closest("div").addClass("active");
+									$("#favorites-list").addClass("visible");
+								},
+								
+								//will show the search again when dragging is done
+								stop:function () {
+									$("#property-search").show();
+									$("#favorties-list").hide();
+									$(this).removeClass("active").closest("#product").removeClass("active");
+								}
+							});
+						}
+						}
+						}
+					}
+					
+					$(".favorite-button").click(function(){ //checks if the property has already been added based on the data-id value of location and will add it to favorites if it hasnt already been added
+						
+						if($(this).parent().attr("data-id") == data.properties[0].location && !prop1added)
+						{
+							prop1added = true;
+							$("#favorties-list").find("ul").append("<li> <a href=\"prop1.html\">" + $(this).parent().attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop1added=false;
+							});	
+						}
+						else if($(this).parent().attr("data-id") == data.properties[1].location && !prop2added)
+						{
+							prop2added = true;
+							$("#favorties-list").find("ul").append("<li> <a href=\"prop2.html\">" + $(this).parent().attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop2added=false;
+							});	
+						}
+						else if($(this).parent().attr("data-id") == data.properties[2].location && !prop3added)
+						{
+							prop3added = true;
+							$("#favorties-list").find("ul").append("<li> <a href=\"prop3.html\">" + $(this).parent().attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop3added=false;
+							});	
+						}
+						else if($(this).parent().attr("data-id") == data.properties[3].location && !prop4added)
+						{
+							prop4added = true;
+							$("#favorties-list").find("ul").append("<li> <a href=\"prop4.html\">" + $(this).parent().attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop4added=false;
+							});	
+						}
+						else if($(this).parent().attr("data-id") == data.properties[4].location && !prop5added)
+						{
+							prop5added = true;
+							$("#favorties-list").find("ul").append("<li> <a href=\"prop5.html\">" + $(this).parent().attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop5added=false;
+							});	
+						}
+						else if($(this).parent().attr("data-id") == data.properties[5].location && !prop6added)
+						{
+							prop6added = true;
+							$("#favorties-list").find("ul").append("<li> <a href=\"prop6.html\">" + $(this).parent().attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop6added=false;
+							});	
+						}
+						else if($(this).parent().attr("data-id") == data.properties[6].location && !prop7added)
+						{
+							prop7added = true;
+							$("#favorties-list").find("ul").append("<li> <a href=\"prop7.html\">" + $(this).parent().attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop7added=false;
+							});	
+						}
+					});
+					
+					//will display an error if nothing matches
+					if (noMatches){
+						$("#propertiesDiv").append("<div class=\"noMatchesListing\"> <h3> " +
+							"Sorry no listings matched those conditions </h3> <p> Please alter your search and try again </p> </div>");
+					}
+				});
+				
+				$("#favorties-list").droppable({
+
+					tolerance:"pointer", //will drop if the mouse icon is in the area regardless of the draggable size
+					drop: function( event, ui ) { //on drop runs the same checks as the button to add to fave list
+						
+						if(ui.draggable.attr("data-id") == data.properties[0].location && !prop1added)
+						{
+							$(this).find("ul").append("<li> <a href=\"prop1.html\">" + ui.draggable.attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							prop1added = true;
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop1added = false;
+							});
+						}
+						else if(ui.draggable.attr("data-id") == data.properties[1].location && !prop2added)
+						{
+							$(this).find("ul").append("<li> <a href=\"prop2.html\">" + ui.draggable.attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							prop2added = true;
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop2added = false;
+							});
+						}
+						else if(ui.draggable.attr("data-id") == data.properties[2].location && !prop3added)
+						{
+							$(this).find("ul").append("<li> <a href=\"prop3.html\">" + ui.draggable.attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							prop3added = true;
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop3added = false;
+							});
+						}
+						else if(ui.draggable.attr("data-id") == data.properties[3].location && !prop4added)
+						{
+							$(this).find("ul").append("<li> <a href=\"prop4.html\">" + ui.draggable.attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							prop4added = true;
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop4added = false;
+							});
+						}
+						else if(ui.draggable.attr("data-id") == data.properties[4].location && !prop5added)
+						{
+							$(this).find("ul").append("<li> <a href=\"prop5.html\">" + ui.draggable.attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							prop5added = true;
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop5added = false;
+							});
+						}
+						else if(ui.draggable.attr("data-id") == data.properties[5].location && !prop6added)
+						{
+							$(this).find("ul").append("<li> <a href=\"prop6.html\">" + ui.draggable.attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							prop6added = true;
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop6added = false;
+							});
+						}
+						else if(ui.draggable.attr("data-id") == data.properties[6].location && !prop7added)
+						{
+							$(this).find("ul").append("<li> <a href=\"prop7.html\">" + ui.draggable.attr("data-id") + "</a><button class=\"delete-favorite\">X</button></li>");
+							prop7added = true;
+							$(".delete-favorite").button();
+							$(".delete-favorite").on("click", function(){				
+								$(this).parent().remove();
+								prop7added = false;
+							});
+						}
+					 }
+				});
+				
+				$("#clear-all").button();
+				
+				//
+				$("#clear-all").on("click", function(){	//clears all favorites and hides the favorite window		
+					$("#fav-list-ul").empty();
+					$("#property-search").toggle();
+					$("#favorties-list").toggle();
+					prop1added = false;
+					prop2added = false;
+					prop3added = false;
+					prop4added = false;
+					prop5added = false;
+					prop6added = false;
+					prop7added = false;	
+				});
+				
+				$("#favorties-list").hide(); //hdes the favorite list on page load as it's not shown until needed
+				
+				$("#favorites").click(function(){ //toggles showing the favorites on demand
+					$("#property-search").hide();
+					$("#favorties-list").show();			
+				});
+				
+				$("#search").click(function(){ //returns to the search when the favorites are no longer needed
+					$("#property-search").show();
+					$("#favorties-list").hide();			
+				});
+				
+			});	
+		}));
+		
+	</script>
+ 
+</body>
+</html>
